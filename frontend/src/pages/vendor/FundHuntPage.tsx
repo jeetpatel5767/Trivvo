@@ -4,8 +4,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadCont
 import { parseUnits, formatUnits } from 'viem';
 import { HUNT_ESCROW_ABI, ERC20_ABI, CONTRACTS } from '../../lib/contracts';
 import { getHunt, fundHunt } from '../../lib/api';
-import { VendorSidebar } from '../../components/VendorSidebar';
-import { WalletButton } from '../../components/WalletButton';
+import LogoT from '../../assets/LogoT.png';
 
 type FundingStep = 'input' | 'creating' | 'approving' | 'funding' | 'done';
 
@@ -148,127 +147,319 @@ export default function FundHuntPage() {
     const estimatedParticipants = Math.floor(parseFloat(amount || '0') / perParticipant);
     const balanceDisplay = usdcBalance ? parseFloat(formatUnits(usdcBalance as bigint, 6)).toFixed(2) : '0.00';
 
-    return (
-        <div className="vendor-layout">
-            <div className="vendor-header">
-                <div className="logo logo-sm">Tr!vvo</div>
-                <WalletButton />
-            </div>
-            <VendorSidebar />
+    const cardStyle: React.CSSProperties = {
+        backgroundColor: '#FFFFFF',
+        border: 'var(--nb-border)',
+        boxShadow: 'var(--nb-shadow)',
+        borderRadius: 'var(--nb-radius-lg)',
+        padding: '24px',
+        marginBottom: '24px'
+    };
 
-            <div className="page">
-                <div className="page-header">
-                    <button className="back-btn" onClick={() => navigate('/vendor/dashboard')}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
-                    </button>
-                    <h2>Fund Hunt</h2>
+    const inputStyle: React.CSSProperties = {
+        width: '100%',
+        padding: '16px',
+        backgroundColor: '#FFFFFF',
+        border: '3px solid #000',
+        borderRadius: '12px',
+        fontSize: '24px',
+        fontWeight: 900,
+        outline: 'none',
+        textAlign: 'center',
+        boxShadow: '4px 4px 0px #000'
+    };
+
+    return (
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            minHeight: '100vh',
+            fontFamily: "'Inter', sans-serif",
+            color: '#000000',
+            paddingBottom: '40px'
+        }}>
+            {/* Top Navigation Bar */}
+            <div style={{
+                backgroundColor: '#FFFFFF',
+                borderBottom: 'var(--nb-border)',
+                padding: '16px 24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: '2px solid #000',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '4px'
+                    }}>
+                        <img src={LogoT} alt="T" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                    <span style={{ fontSize: '18px', fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase' }}>TR!VVO</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span style={{ fontSize: '20px', cursor: 'pointer' }}>🔔</span>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: '#E5E7EB',
+                        border: '2px solid #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px'
+                    }}>👤</div>
+                </div>
+            </div>
+
+            <div style={{ padding: '24px' }}>
+                {/* Header Section */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+                    <button
+                        onClick={() => navigate('/vendor/dashboard')}
+                        style={{
+                            width: '48px',
+                            height: '48px',
+                            backgroundColor: '#FFFFFF',
+                            border: 'var(--nb-border)',
+                            boxShadow: '4px 4px 0px #000',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '20px',
+                            cursor: 'pointer'
+                        }}
+                    >←</button>
+                    <h1 style={{
+                        fontSize: '28px',
+                        fontWeight: 900,
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        margin: 0,
+                        lineHeight: '1'
+                    }}>FUND HUNT 💰</h1>
                 </div>
 
                 {step === 'done' ? (
-                    <div className="animate-scale-in text-center" style={{ paddingTop: '40px' }}>
+                    <div style={{ ...cardStyle, textAlign: 'center', padding: '40px 24px' }}>
                         <div style={{
-                            width: '80px', height: '80px', borderRadius: '50%',
-                            background: 'linear-gradient(135deg, #10B981, #059669)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            margin: '0 auto 24px', boxShadow: '0 0 40px rgba(16, 185, 129, 0.4)',
-                            fontSize: '2rem',
-                        }}>
-                            ✓
-                        </div>
-                        <h1>Hunt Funded! 🎉</h1>
-                        <p className="mt-2">{amount} USDC deposited into escrow contract</p>
-                        <p className="mt-1" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                            Tx: {fundTxHash?.slice(0, 10)}...{fundTxHash?.slice(-8)}
+                            width: '80px',
+                            height: '80px',
+                            backgroundColor: 'var(--nb-mint)',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto 24px',
+                            fontSize: '40px'
+                        }}>✓</div>
+                        <h2 style={{ fontSize: '24px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '16px' }}>HUNT FUNDED! 🎉</h2>
+                        <p style={{ fontWeight: 700, margin: '0 0 8px 0' }}>{amount} USDC deposited into escrow</p>
+                        <p style={{ fontSize: '12px', fontWeight: 800, color: '#6B7280', marginBottom: '16px' }}>
+                            TX: {fundTxHash?.slice(0, 10)}...{fundTxHash?.slice(-8)}
                         </p>
-                        <p className="mt-2">Your hunt is now <strong style={{ color: 'var(--success)' }}>ACTIVE</strong></p>
+                        <div style={{
+                            backgroundColor: 'var(--nb-yellow)',
+                            border: '2px solid #000',
+                            padding: '8px 16px',
+                            borderRadius: '12px',
+                            display: 'inline-block',
+                            fontWeight: 900,
+                            marginBottom: '32px'
+                        }}>LIVE & ACTIVE ●</div>
 
-                        <div className="flex flex-col gap-2 mt-6">
-                            <button onClick={() => navigate(`/vendor/hunt-manage/${id}`)} className="btn btn-primary btn-full">
-                                Manage Hunt
-                            </button>
-                            <button onClick={() => navigate('/vendor/dashboard')} className="btn btn-secondary btn-full">
-                                Back to Dashboard
-                            </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <button
+                                onClick={() => navigate(`/vendor/hunt-manage/${id}`)}
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#000',
+                                    color: '#FFF',
+                                    border: '2px solid #000',
+                                    borderRadius: '12px',
+                                    padding: '16px',
+                                    fontSize: '18px',
+                                    fontWeight: 900,
+                                    textTransform: 'uppercase',
+                                    cursor: 'pointer'
+                                }}
+                            >MANAGE HUNT</button>
+                            <button
+                                onClick={() => navigate('/vendor/dashboard')}
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#FFFFFF',
+                                    border: '2px solid #000',
+                                    borderRadius: '12px',
+                                    padding: '16px',
+                                    fontSize: '18px',
+                                    fontWeight: 900,
+                                    textTransform: 'uppercase',
+                                    cursor: 'pointer'
+                                }}
+                            >BACK TO DASHBOARD</button>
                         </div>
                     </div>
                 ) : (
-                    <div className="animate-fade-in">
-                        {/* USDC Balance */}
-                        <div className="card mb-3" style={{ textAlign: 'center', padding: '12px' }}>
-                            <small style={{ color: 'var(--text-muted)' }}>Your USDC Balance</small>
-                            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--success)' }}>{balanceDisplay} USDC</div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                        {/* Balance Board */}
+                        <div style={{
+                            backgroundColor: 'var(--nb-mint)',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: 'var(--nb-radius)',
+                            padding: '16px',
+                            textAlign: 'center',
+                            marginBottom: '24px'
+                        }}>
+                            <p style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#000', margin: '0 0 4px 0' }}>YOUR USDC BALANCE</p>
+                            <h2 style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>{balanceDisplay} USDC</h2>
                         </div>
 
-                        <div className="card-glass mb-4">
-                            <h3 className="mb-3">💰 Deposit USDC</h3>
-                            <p style={{ marginBottom: '16px' }}>Fund your hunt escrow. Tokens are locked in the smart contract and distributed as rewards.</p>
+                        {/* Amount Card */}
+                        <div style={cardStyle}>
+                            <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '16px' }}>💰 DEPOSIT USDC</h3>
+                            <p style={{ fontSize: '14px', fontWeight: 700, color: '#6B7280', marginBottom: '24px' }}>
+                                Tokens are locked in escrow and distributed to successful hunters.
+                            </p>
 
-                            <div className="input-group mb-4">
-                                <label>Amount (USDC)</label>
-                                <input className="input" type="number" step="1" value={amount}
+                            <div style={{ marginBottom: '24px' }}>
+                                <label style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>AMOUNT (USDC)</label>
+                                <input
+                                    style={inputStyle}
+                                    type="number"
+                                    step="1"
+                                    value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                     disabled={step !== 'input'}
-                                    style={{ fontSize: '1.5rem', fontWeight: 700, textAlign: 'center' }} />
+                                />
                             </div>
 
-                            <div className="flex gap-2 mb-4">
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '32px' }}>
                                 {['25', '50', '100', '250'].map((a) => (
-                                    <button key={a} onClick={() => setAmount(a)}
-                                        className={`btn btn-sm ${amount === a ? 'btn-primary' : 'btn-secondary'}`}
-                                        style={{ flex: 1 }} disabled={step !== 'input'}>
-                                        {a}
-                                    </button>
+                                    <button
+                                        key={a}
+                                        onClick={() => setAmount(a)}
+                                        disabled={step !== 'input'}
+                                        style={{
+                                            backgroundColor: amount === a ? 'var(--nb-yellow)' : '#FFFFFF',
+                                            border: '2px solid #000',
+                                            borderRadius: '8px',
+                                            padding: '8px',
+                                            fontWeight: 900,
+                                            cursor: 'pointer',
+                                            boxShadow: amount === a ? '2px 2px 0px #000' : 'none'
+                                        }}
+                                    >{a}</button>
                                 ))}
                             </div>
 
-                            <div className="stat-grid">
-                                <div className="stat-card">
-                                    <div className="stat-value">{estimatedParticipants}</div>
-                                    <div className="stat-label">Est. Participants</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                <div style={{
+                                    backgroundColor: '#F3F4F6',
+                                    border: '2px solid #000',
+                                    borderRadius: '12px',
+                                    padding: '12px',
+                                    textAlign: 'center'
+                                }}>
+                                    <div style={{ fontSize: '20px', fontWeight: 900 }}>{estimatedParticipants}</div>
+                                    <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#6B7280' }}>EST. HUNTERS</div>
                                 </div>
-                                <div className="stat-card">
-                                    <div className="stat-value">{perParticipant}</div>
-                                    <div className="stat-label">USDC Per User</div>
+                                <div style={{
+                                    backgroundColor: '#F3F4F6',
+                                    border: '2px solid #000',
+                                    borderRadius: '12px',
+                                    padding: '12px',
+                                    textAlign: 'center'
+                                }}>
+                                    <div style={{ fontSize: '20px', fontWeight: 900 }}>{perParticipant}</div>
+                                    <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#6B7280' }}>USDC PER USER</div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Transaction Steps Progress */}
-                        <div className="card mb-4">
-                            <h3 className="mb-3">Transaction Steps</h3>
-                            <div className="flex flex-col gap-3">
-                                <div className="flex items-center gap-2">
-                                    <span>{step === 'creating' ? '⏳' : createConfirmed ? '✅' : '⬜'}</span>
-                                    <span>1. Create hunt on smart contract</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span>{step === 'approving' ? '⏳' : approveConfirmed ? '✅' : '⬜'}</span>
-                                    <span>2. Approve USDC spend</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span>{step === 'funding' ? '⏳' : fundConfirmed ? '✅' : '⬜'}</span>
-                                    <span>3. Deposit USDC into escrow</span>
-                                </div>
+                        {/* Transaction Tracker */}
+                        <div style={cardStyle}>
+                            <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px' }}>TRANSACTION STEPS</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                {[
+                                    { label: 'Create hunt on smart contract', status: step === 'creating' ? 'loading' : createConfirmed ? 'done' : 'wait' },
+                                    { label: 'Approve USDC spend', status: step === 'approving' ? 'loading' : approveConfirmed ? 'done' : 'wait' },
+                                    { label: 'Deposit tokens into escrow', status: step === 'funding' ? 'loading' : fundConfirmed ? 'done' : 'wait' }
+                                ].map((s, i) => (
+                                    <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                        <div style={{
+                                            width: '24px',
+                                            height: '24px',
+                                            backgroundColor: s.status === 'done' ? 'var(--nb-mint)' : s.status === 'loading' ? 'var(--nb-yellow)' : '#FFF',
+                                            border: '2px solid #000',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            fontSize: '12px',
+                                            fontWeight: 900
+                                        }}>
+                                            {s.status === 'done' ? '✓' : s.status === 'loading' ? '⏳' : i + 1}
+                                        </div>
+                                        <span style={{ fontSize: '14px', fontWeight: 700, color: s.status === 'wait' ? '#6B7280' : '#000' }}>{s.label}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
                         {error && (
-                            <div className="card mb-3" style={{ border: '1px solid var(--danger)', padding: '12px' }}>
-                                <p style={{ color: 'var(--danger)', fontSize: '0.85rem' }}>❌ {error}</p>
+                            <div style={{
+                                backgroundColor: '#FEE2E2',
+                                border: '2px solid #B91C1C',
+                                borderRadius: '12px',
+                                padding: '16px',
+                                marginBottom: '24px',
+                                color: '#B91C1C',
+                                fontWeight: 800,
+                                display: 'flex',
+                                gap: '8px'
+                            }}>
+                                <span>❌</span> {error}
                             </div>
                         )}
 
-                        <button onClick={handleFund} className="btn btn-primary btn-lg btn-full"
-                            disabled={step !== 'input' || !amount || parseFloat(amount) <= 0}>
-                            {step === 'input' ? `Fund Hunt with ${amount} USDC` :
-                                step === 'creating' ? '⏳ Creating hunt on-chain...' :
-                                    step === 'approving' ? '⏳ Approving USDC...' :
-                                        step === 'funding' ? '⏳ Depositing USDC...' : 'Done!'}
+                        <button
+                            onClick={handleFund}
+                            disabled={step !== 'input' || !amount || parseFloat(amount) <= 0}
+                            style={{
+                                width: '100%',
+                                backgroundColor: 'var(--nb-yellow)',
+                                border: 'var(--nb-border)',
+                                boxShadow: 'var(--nb-shadow)',
+                                borderRadius: 'var(--nb-radius-lg)',
+                                padding: '24px',
+                                fontSize: '20px',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                cursor: step !== 'input' ? 'not-allowed' : 'pointer',
+                                opacity: step !== 'input' ? 0.8 : 1
+                            }}
+                        >
+                            {step === 'input' ? `DEPLOY ${amount} USDC` : 'PROCESSING...'}
                         </button>
 
                         {step !== 'input' && (
-                            <p style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                ⚠️ Please confirm each transaction in MetaMask
+                            <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '12px', fontWeight: 800, color: '#6B7280' }}>
+                                ⚠️ CONFIRM TRANSACTIONS IN METAMASK
                             </p>
                         )}
                     </div>

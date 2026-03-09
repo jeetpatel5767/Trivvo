@@ -16,36 +16,132 @@ interface HuntCardProps {
 
 export function HuntCard({ hunt }: HuntCardProps) {
     const navigate = useNavigate();
-    const totalReward = Number(hunt.arrival_reward) + Number(hunt.main_reward);
+    // Calculate a mock discovery progress based on the title length or something consistent
+    const mockProgress = Math.min(Math.floor((hunt.title.length * 7) % 100) + 10, 95);
+    const mockFound = Math.floor(mockProgress / 10);
+    const mockTotal = 20;
 
     return (
-        <div className="card" onClick={() => navigate(`/hunt/${hunt.hunt_id}`)} style={{ cursor: 'pointer' }}>
-            <div className="flex justify-between items-center mb-2">
-                <span className={`badge ${hunt.status === 'active' ? 'badge-active' : hunt.status === 'pending' ? 'badge-pending' : 'badge-ended'}`}>
-                    {hunt.status}
-                </span>
-                <span className="badge badge-reward">
-                    {totalReward} USDC
-                </span>
+        <div
+            onClick={() => navigate(`/hunt/${hunt.hunt_id}`)}
+            style={{
+                backgroundColor: '#FFFFFF',
+                border: 'var(--nb-border)',
+                boxShadow: '8px 8px 0px #000000',
+                borderRadius: 'var(--nb-radius-lg)',
+                padding: '24px',
+                marginBottom: '24px',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                position: 'relative',
+                transition: 'transform 0.1s ease',
+            }}
+            onMouseDown={(e) => e.currentTarget.style.transform = 'translate(4px, 4px)'}
+            onMouseUp={(e) => e.currentTarget.style.transform = 'translate(0, 0)'}
+        >
+            {/* Header: Title and Distance/Label */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <span style={{
+                            backgroundColor: hunt.status === 'active' ? 'var(--nb-mint)' : '#FCA5A5',
+                            border: '2px solid #000',
+                            borderRadius: '6px',
+                            padding: '2px 8px',
+                            fontSize: '10px',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                        }}>
+                            {hunt.status}
+                        </span>
+                    </div>
+                    <h3 style={{
+                        fontSize: '28px',
+                        fontWeight: 900,
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        margin: 0,
+                        lineHeight: '1',
+                        letterSpacing: '-1px'
+                    }}>
+                        {hunt.title}
+                    </h3>
+                    <p style={{
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        color: '#6B7280',
+                        margin: '4px 0 0 0',
+                        textTransform: 'uppercase'
+                    }}>
+                        {hunt.business_name}
+                    </p>
+                </div>
+
+                {/* Distance Badge */}
+                <div style={{
+                    backgroundColor: 'var(--nb-yellow)',
+                    border: '2px solid #000',
+                    borderRadius: '8px',
+                    padding: '4px 8px',
+                    fontSize: '12px',
+                    fontWeight: 900,
+                    boxShadow: '2px 2px 0px #000'
+                }}>
+                    2.4 KM
+                </div>
             </div>
-            <h3 style={{ marginBottom: '4px' }}>{hunt.title}</h3>
-            <p style={{ fontSize: '0.8rem', marginBottom: '8px' }}>{hunt.business_name}</p>
-            {hunt.location_name && (
-                <div className="flex items-center gap-1" style={{ marginTop: '8px' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" />
-                    </svg>
-                    <small>{hunt.location_name}</small>
+
+            {/* Discovery Progress Section */}
+            <div style={{ width: '100%', color: '#000000' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase' }}>Discovery Progress</span>
+                    <span style={{ fontSize: '12px', fontWeight: 800 }}>{mockProgress}%</span>
                 </div>
-            )}
-            <div className="flex justify-between items-center" style={{ marginTop: '12px' }}>
-                <div>
-                    <small>Arrival: <span style={{ color: 'var(--primary-light)' }}>{hunt.arrival_reward} USDC</span></small>
+                <div style={{
+                    width: '100%',
+                    height: '10px',
+                    backgroundColor: '#E5E7EB',
+                    borderRadius: '5px',
+                    border: '2px solid #000',
+                    overflow: 'hidden'
+                }}>
+                    <div style={{
+                        width: `${mockProgress}%`,
+                        height: '100%',
+                        backgroundColor: 'var(--nb-mint)',
+                    }} />
                 </div>
-                <div>
-                    <small>Main: <span style={{ color: 'var(--success)' }}>{hunt.main_reward} USDC</span></small>
+                <div style={{ marginTop: '8px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase' }}>
+                        {mockFound}/{mockTotal} Myths Found
+                    </span>
                 </div>
             </div>
+
+            {/* Start Hunt Button */}
+            <button
+                style={{
+                    width: '100%',
+                    backgroundColor: 'var(--nb-yellow)',
+                    border: 'var(--nb-border)',
+                    boxShadow: '4px 4px 0px #000',
+                    borderRadius: 'var(--nb-radius-lg)',
+                    padding: '12px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '18px',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    marginTop: '8px'
+                }}
+            >
+                Start Hunt ▶
+            </button>
         </div>
     );
 }

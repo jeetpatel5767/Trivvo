@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { HUNT_ESCROW_ABI, CONTRACTS } from '../../lib/contracts';
-import { VendorSidebar } from '../../components/VendorSidebar';
-import { WalletButton } from '../../components/WalletButton';
 import { getHunt, getParticipants, withdrawHunt } from '../../lib/api';
+import LogoT from '../../assets/LogoT.png';
 
 export default function HuntManagePage() {
     const { id } = useParams<{ id: string }>();
@@ -65,12 +64,22 @@ export default function HuntManagePage() {
         });
     };
 
+    const cardStyle: React.CSSProperties = {
+        backgroundColor: '#FFFFFF',
+        border: 'var(--nb-border)',
+        boxShadow: 'var(--nb-shadow)',
+        borderRadius: 'var(--nb-radius-lg)',
+        padding: '24px',
+        marginBottom: '24px'
+    };
+
     if (loading) {
         return (
-            <div className="vendor-layout">
-                <VendorSidebar />
-                <div className="page" style={{ padding: '40px' }}>
-                    <div className="card skeleton" style={{ height: '200px' }} />
+            <div style={{ backgroundColor: 'var(--nb-bg)', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ padding: '40px', textAlign: 'center' }}>
+                    <div style={{ width: '50px', height: '50px', border: '5px solid #000', borderTopColor: 'var(--nb-yellow)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                    <p style={{ marginTop: '16px', fontWeight: 900 }}>LOADING HUNT...</p>
+                    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                 </div>
             </div>
         );
@@ -78,12 +87,12 @@ export default function HuntManagePage() {
 
     if (!hunt) {
         return (
-            <div className="vendor-layout">
-                <VendorSidebar />
-                <div className="page" style={{ padding: '40px', textAlign: 'center' }}>
-                    <h2>Hunt not found</h2>
-                    <button className="btn btn-secondary mt-4" onClick={() => navigate('/vendor/dashboard')}>Back to Dashboard</button>
-                </div>
+            <div style={{ backgroundColor: 'var(--nb-bg)', minHeight: '100vh', padding: '40px', textAlign: 'center' }}>
+                <h2 style={{ fontWeight: 900 }}>HUNT NOT FOUND</h2>
+                <button
+                    onClick={() => navigate('/vendor/dashboard')}
+                    style={{ backgroundColor: '#FFFFFF', border: 'var(--nb-border)', boxShadow: 'var(--nb-shadow)', borderRadius: '12px', padding: '12px 24px', fontWeight: 900, cursor: 'pointer', marginTop: '24px' }}
+                >BACK TO DASHBOARD</button>
             </div>
         );
     }
@@ -91,106 +100,345 @@ export default function HuntManagePage() {
     const completedCount = participants.filter(p => p.task_completed).length;
 
     return (
-        <div className="vendor-layout">
-            <div className="vendor-header">
-                <div className="logo logo-sm">Tr!vvo</div>
-                <WalletButton />
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            minHeight: '100vh',
+            fontFamily: "'Inter', sans-serif",
+            color: '#000000',
+            paddingBottom: '40px'
+        }}>
+            {/* Top Navigation Bar */}
+            <div style={{
+                backgroundColor: '#FFFFFF',
+                borderBottom: 'var(--nb-border)',
+                padding: '16px 24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: '2px solid #000',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '4px'
+                    }}>
+                        <img src={LogoT} alt="T" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                    <span style={{ fontSize: '18px', fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase' }}>TR!VVO</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span style={{ fontSize: '20px', cursor: 'pointer' }}>🔔</span>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: '#E5E7EB',
+                        border: '2px solid #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px'
+                    }}>👤</div>
+                </div>
             </div>
-            <VendorSidebar />
 
-            <div className="page" style={{ paddingBottom: '40px' }}>
-                <div className="page-header">
-                    <button className="back-btn" onClick={() => navigate('/vendor/dashboard')}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
-                    </button>
-                    <h2>Manage: {hunt.title}</h2>
-                    <span className={`badge badge-${hunt.status === 'active' ? 'active' : 'pending'}`}>{hunt.status}</span>
+            <div style={{ padding: '24px' }}>
+                {/* Header Section */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+                    <button
+                        onClick={() => navigate('/vendor/dashboard')}
+                        style={{
+                            width: '48px',
+                            height: '48px',
+                            backgroundColor: '#FFFFFF',
+                            border: 'var(--nb-border)',
+                            boxShadow: '4px 4px 0px #000',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '20px',
+                            cursor: 'pointer'
+                        }}
+                    >←</button>
+                    <div style={{ flex: 1 }}>
+                        <h1 style={{
+                            fontSize: '24px',
+                            fontWeight: 900,
+                            fontStyle: 'italic',
+                            textTransform: 'uppercase',
+                            margin: 0,
+                            lineHeight: '1'
+                        }}>{hunt.title}</h1>
+                        <span style={{
+                            display: 'inline-block',
+                            backgroundColor: hunt.status === 'active' ? 'var(--nb-mint)' : '#E5E7EB',
+                            border: '2px solid #000',
+                            borderRadius: '6px',
+                            padding: '2px 8px',
+                            fontSize: '10px',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            marginTop: '8px'
+                        }}>{hunt.status}</span>
+                    </div>
                 </div>
 
-                {/* Stats */}
-                <div className="stat-grid mb-4 animate-fade-in">
-                    <div className="stat-card">
-                        <div className="stat-value">{participants.length}</div>
-                        <div className="stat-label">Participants</div>
+                {/* Stats Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+                    <div style={{ ...cardStyle, padding: '16px', marginBottom: 0, position: 'relative', overflow: 'hidden' }}>
+                        <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', margin: 0 }}>PARTICIPANTS</p>
+                        <h2 style={{ fontSize: '28px', fontWeight: 900, margin: '8px 0 0 0' }}>{participants.length}</h2>
+                        <div style={{ position: 'absolute', right: '-5px', top: '5px', fontSize: '32px', opacity: 0.1 }}>👥</div>
                     </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{completedCount}</div>
-                        <div className="stat-label">Completed</div>
+                    <div style={{ ...cardStyle, padding: '16px', marginBottom: 0, position: 'relative', overflow: 'hidden' }}>
+                        <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', margin: 0 }}>COMPLETED</p>
+                        <h2 style={{ fontSize: '28px', fontWeight: 900, color: 'var(--nb-mint)', margin: '8px 0 0 0' }}>{completedCount}</h2>
+                        <div style={{ position: 'absolute', right: '-5px', top: '5px', fontSize: '32px', opacity: 0.1 }}>✓</div>
                     </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{hunt.qr_scans}</div>
-                        <div className="stat-label">QR Scans</div>
+                    <div style={{ ...cardStyle, padding: '16px', marginBottom: 0, position: 'relative', overflow: 'hidden' }}>
+                        <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', margin: 0 }}>QR SCANS</p>
+                        <h2 style={{ fontSize: '28px', fontWeight: 900, margin: '8px 0 0 0' }}>{hunt.qr_scans}</h2>
+                        <div style={{ position: 'absolute', right: '-5px', top: '5px', fontSize: '32px', opacity: 0.1 }}>📱</div>
                     </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{Number(hunt.rewards_distributed).toFixed(2)}</div>
-                        <div className="stat-label">USDC Distributed</div>
+                    <div style={{ ...cardStyle, padding: '16px', marginBottom: 0, border: 'var(--nb-border)', backgroundColor: '#FEFCE8', position: 'relative', overflow: 'hidden' }}>
+                        <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', margin: 0 }}>DISTRIBUTED</p>
+                        <h2 style={{ fontSize: '24px', fontWeight: 900, margin: '8px 0 0 0' }}>${Number(hunt.rewards_distributed).toFixed(1)}</h2>
+                        <div style={{ position: 'absolute', right: '-5px', top: '5px', fontSize: '32px', opacity: 0.1 }}>💰</div>
                     </div>
                 </div>
-                {/* Additional Stats Row */}
-                <div className="stat-grid mb-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                    <div className="stat-card" style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.1))', borderColor: 'rgba(16,185,129,0.2)' }}>
-                        <div className="stat-value" style={{ fontSize: '2rem', color: 'var(--success)' }}>
-                            {hunt.remaining_funds !== undefined ? Number(hunt.remaining_funds).toFixed(2) : '-.--'}
+
+                {/* Remaining Funds Card */}
+                <div style={{
+                    backgroundColor: '#FFFFFF',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: 'var(--nb-radius)',
+                    padding: '24px',
+                    marginBottom: '32px',
+                    textAlign: 'center',
+                    position: 'relative'
+                }}>
+                    <p style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', margin: '0 0 8px 0' }}>Remaining On-Chain Funds</p>
+
+                    {hunt.contract_hunt_id === null ? (
+                        <div style={{ padding: '10px' }}>
+                            <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#EF4444', margin: '0 0 8px 0' }}>NOT FUNDED</h2>
+                            <button
+                                onClick={() => navigate(`/vendor/fund-hunt/${id}`)}
+                                style={{ backgroundColor: 'var(--nb-yellow)', border: '2px solid #000', borderRadius: '8px', padding: '8px 16px', fontWeight: 900, cursor: 'pointer' }}
+                            >FUND NOW 💰</button>
                         </div>
-                        <div className="stat-label">Remaining Staked USDC (On-Chain)</div>
-                    </div>
-                </div>
-
-                {/* Quick actions */}
-                {withdrawError && (
-                    <div className="card mb-4 mt-2" style={{ borderColor: 'rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.05)' }}>
-                        <p style={{ color: 'var(--error)', fontSize: '0.85rem' }}>⚠️ {withdrawError}</p>
-                    </div>
-                )}
-
-                <div className="flex gap-2 mb-4 animate-slide-up" style={{ flexWrap: 'wrap' }}>
-                    <button onClick={() => navigate(`/vendor/qr/${id}`)} className="btn btn-secondary btn-sm" style={{ flex: '1 1 auto' }}>📱 QR Code</button>
-                    <button onClick={() => navigate(`/vendor/participants/${id}`)} className="btn btn-secondary btn-sm" style={{ flex: '1 1 auto' }}>👥 All Users</button>
-                    <button onClick={() => navigate('/vendor/verify-task')} className="btn btn-primary btn-sm" style={{ flex: '1 1 auto' }}>✓ Verify Tasks</button>
-
-                    {hunt.status === 'expired' && Number(hunt.remaining_funds) > 0 && (
-                        <button
-                            onClick={handleWithdraw}
-                            disabled={isWithdrawing}
-                            className="btn btn-sm"
-                            style={{ flex: '1 1 auto', background: 'var(--error)', color: 'white', border: 'none' }}
-                        >
-                            {isWithdrawing ? '⏳ Withdrawing...' : '💸 Withdraw Funds'}
-                        </button>
+                    ) : hunt.remaining_funds === undefined ? (
+                        <div>
+                            <h2 style={{ fontSize: '36px', fontWeight: 900, color: '#6B7280', margin: 0 }}>SYNCING...</h2>
+                            <p style={{ fontSize: '10px', fontWeight: 700, marginTop: '8px' }}>FETCHING FROM BLOCKCHAIN</p>
+                        </div>
+                    ) : (
+                        <>
+                            <h2 style={{ fontSize: '36px', fontWeight: 900, color: Number(hunt.remaining_funds) > 0 ? 'var(--nb-mint)' : '#EF4444', margin: 0 }}>
+                                {Number(hunt.remaining_funds).toFixed(2)} <span style={{ fontSize: '18px' }}>USDC</span>
+                            </h2>
+                            {Number(hunt.remaining_funds) === 0 && (
+                                <p style={{ fontSize: '10px', fontWeight: 900, color: '#EF4444', marginTop: '8px', textTransform: 'uppercase' }}>
+                                    ⚠ Funds depleted or contract reset
+                                </p>
+                            )}
+                        </>
                     )}
                 </div>
 
-                {/* Recent participants */}
-                <h3 className="mb-3">Recent Activity</h3>
+                {/* Quick Actions */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '32px' }}>
+                    <button
+                        onClick={() => navigate(`/vendor/qr/${id}`)}
+                        style={{
+                            backgroundColor: '#FFFFFF',
+                            border: '2px solid #000',
+                            borderRadius: '12px',
+                            padding: '16px 8px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                            boxShadow: '4px 4px 0px #000'
+                        }}
+                    >
+                        <span style={{ fontSize: '24px' }}>📱</span>
+                        <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>QR CODE</span>
+                    </button>
+                    <button
+                        onClick={() => navigate(`/vendor/participants/${id}`)}
+                        style={{
+                            backgroundColor: '#FFFFFF',
+                            border: '2px solid #000',
+                            borderRadius: '12px',
+                            padding: '16px 8px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                            boxShadow: '4px 4px 0px #000'
+                        }}
+                    >
+                        <span style={{ fontSize: '24px' }}>👥</span>
+                        <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>USERS</span>
+                    </button>
+                    <button
+                        onClick={() => navigate('/vendor/verify-task')}
+                        style={{
+                            backgroundColor: 'var(--nb-yellow)',
+                            border: '2px solid #000',
+                            borderRadius: '12px',
+                            padding: '16px 8px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                            boxShadow: '4px 4px 0px #000'
+                        }}
+                    >
+                        <span style={{ fontSize: '24px' }}>✓</span>
+                        <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>VERIFY</span>
+                    </button>
+                </div>
+
+                {/* Error Box */}
+                {withdrawError && (
+                    <div style={{ backgroundColor: '#FEE2E2', border: '2px solid #B91C1C', borderRadius: '12px', padding: '16px', marginBottom: '24px', color: '#B91C1C', fontWeight: 800 }}>
+                        ⚠️ {withdrawError}
+                    </div>
+                )}
+
+                {/* Withdraw Section */}
+                {hunt.status === 'expired' && Number(hunt.remaining_funds) > 0 && (
+                    <button
+                        onClick={handleWithdraw}
+                        disabled={isWithdrawing}
+                        style={{
+                            width: '100%',
+                            backgroundColor: '#FCA5A5',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            fontSize: '18px',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            cursor: isWithdrawing ? 'not-allowed' : 'pointer',
+                            marginBottom: '32px'
+                        }}
+                    >
+                        {isWithdrawing ? '⏳ WITHDRAWING...' : '💸 WITHDRAW REMAINING FUNDS'}
+                    </button>
+                )}
+
+                {/* Recent Activity */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '20px' }}>
+                    <h3 style={{ fontSize: '20px', fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase', margin: 0 }}>RECENT ACTIVITY</h3>
+                </div>
+
                 {participants.length === 0 ? (
-                    <div className="card" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                        No participants yet. Share your QR code!
+                    <div style={{ ...cardStyle, padding: '32px', textAlign: 'center', backgroundColor: '#F3F4F6' }}>
+                        <p style={{ fontWeight: 800, color: '#6B7280', margin: 0 }}>No participants yet. Give your code to someone!</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-2 stagger">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {participants.slice(0, 10).map((p, i) => (
-                            <div key={p.id || i} className="card" style={{ padding: '14px 16px' }}>
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="wallet-address" style={{ fontSize: '0.75rem', padding: '4px 8px' }}>
-                                        {p.wallet_address.slice(0, 6)}...{p.wallet_address.slice(-4)}
+                            <div
+                                key={p.id || i}
+                                style={{
+                                    backgroundColor: '#FFFFFF',
+                                    border: 'var(--nb-border)',
+                                    boxShadow: '4px 4px 0px #000',
+                                    borderRadius: '16px',
+                                    padding: '16px'
+                                }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                    <div style={{
+                                        backgroundColor: '#E5E7EB',
+                                        border: '1px solid #000',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '10px',
+                                        fontWeight: 900,
+                                        fontFamily: 'monospace'
+                                    }}>{p.wallet_address.slice(0, 6)}...{p.wallet_address.slice(-4)}</div>
+                                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#6B7280' }}>
+                                        {new Date(p.arrival_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
-                                    <small>{new Date(p.arrival_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
                                 </div>
-                                <div className="flex justify-between items-center mt-2">
-                                    <span className={`badge ${p.task_completed ? 'badge-active' : 'badge-pending'}`}>
-                                        {p.task_completed ? 'Task Done' : 'In Progress'}
-                                    </span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        backgroundColor: p.task_completed ? 'var(--nb-mint)' : 'var(--nb-yellow)',
+                                        border: '1px solid #000',
+                                        borderRadius: '6px',
+                                        padding: '4px 10px',
+                                        fontSize: '10px',
+                                        fontWeight: 900,
+                                        textTransform: 'uppercase'
+                                    }}>
+                                        {p.task_completed ? '✓ TASK DONE' : '○ IN PROGRESS'}
+                                    </div>
                                     {p.task_completed && !p.reward_tx_hash && (
-                                        <button className="btn btn-success btn-sm" onClick={() => navigate('/vendor/verify-task')}>Verify</button>
+                                        <button
+                                            onClick={() => navigate('/vendor/verify-task')}
+                                            style={{
+                                                backgroundColor: '#000',
+                                                color: '#FFF',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                padding: '6px 12px',
+                                                fontSize: '10px',
+                                                fontWeight: 900,
+                                                cursor: 'pointer'
+                                            }}
+                                        >VERIFY</button>
                                     )}
                                     {p.reward_tx_hash && (
-                                        <span className="badge badge-reward">Rewarded</span>
+                                        <div style={{
+                                            backgroundColor: 'var(--nb-yellow)',
+                                            border: '1px solid #000',
+                                            borderRadius: '6px',
+                                            padding: '4px 10px',
+                                            fontSize: '10px',
+                                            fontWeight: 900,
+                                            textTransform: 'uppercase'
+                                        }}>💰 REWARDED</div>
                                     )}
                                 </div>
                             </div>
                         ))}
                         {participants.length > 10 && (
-                            <button className="btn btn-secondary mt-2" onClick={() => navigate(`/vendor/participants/${id}`)}>View All Participants</button>
+                            <button
+                                onClick={() => navigate(`/vendor/participants/${id}`)}
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#FFFFFF',
+                                    border: '2px solid #000',
+                                    borderRadius: '12px',
+                                    padding: '12px',
+                                    fontWeight: 900,
+                                    cursor: 'pointer',
+                                    marginTop: '8px'
+                                }}
+                            >VIEW ALL PARTICIPANTS ({participants.length})</button>
                         )}
                     </div>
                 )}

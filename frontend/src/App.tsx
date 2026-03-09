@@ -24,6 +24,7 @@ import ParticipantsPage from './pages/vendor/ParticipantsPage';
 import VerifyTaskPage from './pages/vendor/VerifyTaskPage';
 import AnalyticsPage from './pages/vendor/AnalyticsPage';
 
+import SplashScreen from './pages/SplashScreen';
 import './styles/globals.css';
 
 // Error boundary to catch and display runtime errors instead of white screen
@@ -68,7 +69,7 @@ function App() {
           <MobileContainer>
             <Routes>
               {/* Landing */}
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/" element={<SplashScreen />} />
 
               {/* Customer routes */}
               <Route path="/login" element={<LoginPage />} />

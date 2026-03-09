@@ -46,12 +46,10 @@ export default function HuntsPage() {
                 if (apiHunts.length > 0) {
                     setHunts(apiHunts);
                 } else {
-                    // No hunts in database yet — show demo
                     setHunts(DEMO_HUNTS);
                     setUsingDemo(true);
                 }
             } catch (err) {
-                // Backend not available — use demo data
                 console.log('Using demo hunts (backend unavailable)');
                 setHunts(DEMO_HUNTS);
                 setUsingDemo(true);
@@ -71,63 +69,176 @@ export default function HuntsPage() {
     });
 
     return (
-        <div className="page">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4" style={{ padding: '16px 0' }}>
-                <div>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Explore</h1>
-                    <small style={{ color: 'var(--text-muted)' }}>
-                        {usingDemo ? '📋 Demo data' : `🔴 ${hunts.length} live hunts`}
-                    </small>
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            color: 'var(--nb-text)',
+            minHeight: '100vh',
+            padding: '24px',
+            paddingBottom: '100px',
+            fontFamily: "'Inter', sans-serif"
+        }}>
+            {/* Page Header */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '24px'
+            }}>
+                <button
+                    onClick={() => navigate(-1)}
+                    style={{
+                        width: '48px',
+                        height: '48px',
+                        backgroundColor: '#FFFFFF',
+                        border: 'var(--nb-border)',
+                        boxShadow: '4px 4px 0px #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    ←
+                </button>
+                <h1 style={{
+                    fontSize: '24px',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    margin: 0,
+                    letterSpacing: '-1px'
+                }}>
+                    CITY SELECTION
+                </h1>
+                <div style={{
+                    width: '48px',
+                    height: '48px',
+                    backgroundColor: '#FFFFFF',
+                    border: 'var(--nb-border)',
+                    boxShadow: '4px 4px 0px #000',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '20px'
+                }}>
+                    👤
                 </div>
-                <WalletButton />
             </div>
 
-            {/* Search */}
-            <div className="mb-3">
+            {/* Total Progress Status Card */}
+            <div style={{
+                backgroundColor: '#FEF9C3', // Light yellow
+                border: 'var(--nb-border)',
+                borderRadius: 'var(--nb-radius)',
+                padding: '20px',
+                marginBottom: '32px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                boxShadow: '4px 4px 0px #000'
+            }}>
+                <div>
+                    <p style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', color: '#000', margin: '0 0 4px 0' }}>Total Progress</p>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                        <span style={{ fontSize: '24px', fontWeight: 900 }}>34/150</span>
+                        <span style={{ fontSize: '14px', fontWeight: 800, color: '#6B7280', textTransform: 'uppercase' }}>Myths</span>
+                    </div>
+                </div>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backgroundColor: '#FFFFFF',
+                    padding: '8px 12px',
+                    borderRadius: 'var(--nb-radius)',
+                    border: '2px solid #000'
+                }}>
+                    <span style={{ fontSize: '18px' }}>🌟</span>
+                    <span style={{ fontSize: '14px', fontWeight: 900, color: '#000000' }}>LEVEL 12</span>
+                </div>
+            </div>
+
+            {/* Search and Filters */}
+            <div style={{ marginBottom: '24px' }}>
                 <input
-                    className="input" placeholder="Search hunts, brands, locations..."
-                    value={search} onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search hunts, brands, locations..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{
+                        width: '100%',
+                        padding: '16px',
+                        backgroundColor: '#FFFFFF',
+                        border: 'var(--nb-border)',
+                        boxShadow: '4px 4px 0px #000',
+                        borderRadius: 'var(--nb-radius)',
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        outline: 'none',
+                        marginBottom: '16px'
+                    }}
                 />
-            </div>
-
-            {/* Filters */}
-            <div className="flex gap-2 mb-4">
-                {['all', 'active', 'upcoming'].map(f => (
-                    <button key={f} onClick={() => setFilter(f)}
-                        className={`btn btn-sm ${filter === f ? 'btn-primary' : 'btn-secondary'}`}
-                        style={{ fontSize: '0.75rem', textTransform: 'capitalize' }}>
-                        {f}
-                    </button>
-                ))}
+                <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
+                    {['all', 'active', 'upcoming'].map(f => (
+                        <button
+                            key={f}
+                            onClick={() => setFilter(f)}
+                            style={{
+                                padding: '8px 20px',
+                                backgroundColor: filter === f ? 'var(--nb-yellow)' : '#FFFFFF',
+                                border: '2px solid #000',
+                                boxShadow: filter === f ? '2px 2px 0px #000' : 'none',
+                                borderRadius: '12px',
+                                fontSize: '14px',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
+                            {f}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Hunts List */}
             {loading ? (
-                <div className="flex flex-col gap-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {[1, 2, 3].map(i => (
-                        <div key={i} className="card skeleton" style={{ height: '140px' }} />
+                        <div key={i} style={{
+                            height: '180px',
+                            backgroundColor: '#E5E7EB',
+                            borderRadius: 'var(--nb-radius-lg)',
+                            border: 'var(--nb-border)',
+                            opacity: 0.5
+                        }} />
                     ))}
                 </div>
             ) : filtered.length === 0 ? (
-                <div className="card" style={{ textAlign: 'center', padding: '40px 20px' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🔍</div>
-                    <h3>No hunts found</h3>
-                    <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Try a different search or filter</p>
+                <div style={{
+                    backgroundColor: '#FFFFFF',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: 'var(--nb-radius)',
+                    padding: '40px',
+                    textAlign: 'center'
+                }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+                    <h3 style={{ fontSize: '20px', fontWeight: 900 }}>NO HUNTS FOUND</h3>
+                    <p style={{ color: '#6B7280', fontWeight: 700, marginTop: '8px' }}>Try a different search or filter</p>
                 </div>
             ) : (
-                <div className="flex flex-col gap-3">
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {filtered.map((hunt, i) => (
-                        <div key={hunt.hunt_id} className="animate-slide-up"
-                            style={{ animationDelay: `${i * 0.05}s` }}
-                            onClick={() => navigate(`/hunt/${hunt.hunt_id}`)}>
+                        <div key={hunt.hunt_id} className="animate-slide-up" style={{ animationDelay: `${i * 0.05}s` }}>
                             <HuntCard hunt={hunt} />
                         </div>
                     ))}
                 </div>
             )}
 
-            <div style={{ height: '80px' }} />
             <BottomNav />
         </div>
     );

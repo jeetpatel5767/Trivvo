@@ -15,99 +15,233 @@ export default function ArrivalRewardPage() {
 
     if (!state) {
         return (
-            <div className="page text-center" style={{ paddingTop: '100px' }}>
-                <h2>No reward data</h2>
-                <button onClick={() => navigate('/hunts')} className="btn btn-primary mt-4">Back to Hunts</button>
+            <div style={{
+                backgroundColor: 'var(--nb-bg)',
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '24px',
+                textAlign: 'center',
+                color: '#000000'
+            }}>
+                <div style={{
+                    backgroundColor: '#FFFFFF',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: 'var(--nb-radius-lg)',
+                    padding: '32px'
+                }}>
+                    <h2 style={{ fontWeight: 900, marginBottom: '24px' }}>NO REWARD DATA FOUND</h2>
+                    <button
+                        onClick={() => navigate('/hunts')}
+                        style={{
+                            backgroundColor: 'var(--nb-yellow)',
+                            border: 'var(--nb-border)',
+                            boxShadow: '4px 4px 0px #000',
+                            borderRadius: '12px',
+                            padding: '16px 32px',
+                            fontSize: '18px',
+                            fontWeight: 900,
+                            cursor: 'pointer'
+                        }}
+                    >BACK TO HUNTS</button>
+                </div>
             </div>
         );
     }
 
-    return (
-        <div className="page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-            {/* Glow background */}
-            <div style={{
-                position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)',
-                width: '350px', height: '350px', borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(124, 58, 237, 0.1) 50%, transparent 70%)',
-                filter: 'blur(40px)', pointerEvents: 'none',
-                animation: showReward ? 'glow 2s infinite' : 'none',
-            }} />
+    const cardStyle: React.CSSProperties = {
+        backgroundColor: '#FFFFFF',
+        border: 'var(--nb-border)',
+        boxShadow: 'var(--nb-shadow)',
+        borderRadius: 'var(--nb-radius-lg)',
+        padding: '24px',
+        width: '100%',
+        maxWidth: '400px',
+        position: 'relative'
+    };
 
-            {/* Reward content */}
-            <div className={showReward ? 'animate-scale-in' : ''} style={{ textAlign: 'center', position: 'relative', opacity: showReward ? 1 : 0, transition: 'opacity 0.5s' }}>
-                {/* Check icon */}
+    return (
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            minHeight: '100vh',
+            fontFamily: "'Inter', sans-serif",
+            color: '#000000',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '40px 24px',
+            overflowX: 'hidden'
+        }}>
+            {/* Success Celebration Content */}
+            <div style={{
+                textAlign: 'center',
+                opacity: showReward ? 1 : 0,
+                transform: showReward ? 'scale(1)' : 'scale(0.9)',
+                transition: 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}>
+                {/* Reward Badge */}
                 <div style={{
-                    width: '80px', height: '80px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #10B981, #059669)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    margin: '0 auto 24px', boxShadow: '0 0 40px rgba(16, 185, 129, 0.4)',
+                    width: '100px',
+                    height: '100px',
+                    backgroundColor: 'var(--nb-mint)',
+                    border: 'var(--nb-border)',
+                    boxShadow: '8px 8px 0px #000',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '32px',
+                    fontSize: '48px'
                 }}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                    🎉
                 </div>
 
-                <h1 style={{ marginBottom: '8px' }}>Arrival Reward!</h1>
-                <p style={{ fontSize: '0.95rem', marginBottom: '24px' }}>
-                    Welcome to <strong style={{ color: 'var(--text-primary)' }}>{state.businessName}</strong>
+                <h1 style={{
+                    fontSize: '32px',
+                    fontWeight: 900,
+                    fontStyle: 'italic',
+                    textTransform: 'uppercase',
+                    margin: '0 0 8px 0',
+                    lineHeight: '1'
+                }}>ARRIVAL REWARD!</h1>
+
+                <p style={{
+                    fontSize: '16px',
+                    fontWeight: 800,
+                    color: '#6B7280',
+                    marginBottom: '32px'
+                }}>
+                    Welcome to <span style={{ color: '#000' }}>{state.businessName}</span>
                 </p>
 
-                {/* Reward amount */}
-                <div className="reward-burst" style={{
-                    padding: '24px', borderRadius: 'var(--radius-xl)',
-                    background: 'var(--bg-glass)', border: '1px solid rgba(16, 185, 129, 0.3)',
-                    backdropFilter: 'blur(20px)', marginBottom: '24px',
+                {/* Reward Amount Card */}
+                <div style={{
+                    ...cardStyle,
+                    backgroundColor: 'var(--nb-yellow)',
+                    textAlign: 'center',
+                    padding: '40px 24px',
+                    marginBottom: '32px'
                 }}>
                     <div style={{
-                        fontSize: '3rem', fontWeight: 900,
-                        background: 'linear-gradient(135deg, #10B981, #22D3EE)',
-                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                        backgroundClip: 'text',
+                        fontSize: '48px',
+                        fontWeight: 900,
+                        lineHeight: '1',
+                        marginBottom: '8px'
                     }}>
                         +{state.arrivalReward} USDC
                     </div>
-                    <p style={{ marginTop: '8px' }}>Sent to your wallet</p>
+                    <div style={{
+                        fontSize: '14px',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px'
+                    }}>SENT TO YOUR WALLET 💸</div>
                 </div>
 
-                {/* Transaction link */}
+                {/* Explorer Link */}
                 <a
                     href={state.explorerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tx-link"
-                    style={{ margin: '0 auto' }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        backgroundColor: '#FFFFFF',
+                        border: '2px solid #000',
+                        padding: '10px 20px',
+                        borderRadius: '12px',
+                        fontSize: '12px',
+                        fontWeight: 900,
+                        color: '#000',
+                        textDecoration: 'none',
+                        boxShadow: '4px 4px 0px #000',
+                        marginBottom: '48px'
+                    }}
                 >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                    View on Snowtrace
+                    <span>🔗</span> VIEW ON SNOWTRACE
                 </a>
             </div>
 
-            {/* Tasks unlocked */}
+            {/* Tasks Unlocked Section */}
             {state.tasks && state.tasks.length > 0 && showReward && (
-                <div className="animate-slide-up" style={{ width: '100%', marginTop: '32px', animationDelay: '0.5s' }}>
-                    <div className="card-glass">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span style={{ fontSize: '1.2rem' }}>🔓</span>
-                            <h3>Tasks Unlocked!</h3>
+                <div style={{
+                    width: '100%',
+                    maxWidth: '400px',
+                    opacity: showReward ? 1 : 0,
+                    transform: showReward ? 'translateY(0)' : 'translateY(20px)',
+                    transition: 'all 0.6s ease-out 0.3s'
+                }}>
+                    <div style={{
+                        ...cardStyle,
+                        backgroundColor: '#FFFFFF',
+                        padding: '32px 24px'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                            <span style={{ fontSize: '24px' }}>🔓</span>
+                            <h3 style={{ fontSize: '20px', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>TASKS UNLOCKED!</h3>
                         </div>
-                        <p style={{ marginBottom: '12px' }}>Complete these tasks to earn your main reward:</p>
-                        <div className="flex flex-col gap-2">
+
+                        <p style={{ fontSize: '14px', fontWeight: 700, color: '#6B7280', marginBottom: '24px' }}>
+                            Complete these missions to earn the BIG reward from <span style={{ color: '#000' }}>{state.businessName}</span>.
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
                             {state.tasks.map((task: string, i: number) => (
-                                <div key={i} className="task-item">
-                                    <div className="task-checkbox">
-                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{i + 1}</span>
-                                    </div>
-                                    <span style={{ fontSize: '0.85rem' }}>{task}</span>
+                                <div key={i} style={{
+                                    display: 'flex',
+                                    gap: '12px',
+                                    alignItems: 'center',
+                                    backgroundColor: '#F3F4F6',
+                                    border: '2px solid #000',
+                                    padding: '12px',
+                                    borderRadius: '12px'
+                                }}>
+                                    <div style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        backgroundColor: '#000',
+                                        color: '#FFF',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        fontSize: '12px',
+                                        fontWeight: 900,
+                                        flexShrink: 0
+                                    }}>{i + 1}</div>
+                                    <span style={{ fontSize: '14px', fontWeight: 800 }}>{task}</span>
                                 </div>
                             ))}
                         </div>
+
                         <button
                             onClick={() => navigate(`/tasks/${state.huntId}`, { state })}
-                            className="btn btn-primary btn-full mt-4"
+                            style={{
+                                width: '100%',
+                                backgroundColor: 'var(--nb-yellow)',
+                                border: 'var(--nb-border)',
+                                boxShadow: 'var(--nb-shadow)',
+                                borderRadius: 'var(--nb-radius)',
+                                padding: '20px',
+                                fontSize: '20px',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '12px'
+                            }}
                         >
-                            Start Tasks →
+                            START TASKS <span>→</span>
                         </button>
                     </div>
                 </div>

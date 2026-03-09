@@ -63,14 +63,27 @@ class BlockchainService {
 
     async getHuntDetails(huntId: number) {
         if (!this.isConfigured || !this.escrowContract) return null;
-        const hunt = await this.escrowContract.getHunt(huntId);
-        return {
-            huntId: Number(hunt.huntId), vendor: hunt.vendor, rewardToken: hunt.rewardToken,
-            arrivalReward: ethers.formatUnits(hunt.arrivalReward, 6),
-            mainReward: ethers.formatUnits(hunt.mainReward, 6),
-            remainingFunds: ethers.formatUnits(hunt.remainingFunds, 6),
-            startTime: Number(hunt.startTime), endTime: Number(hunt.endTime), active: hunt.active,
-        };
+        try {
+            const hunt = await this.escrowContract.getHunt(huntId);
+            // If the hunt doesn't exist, the vendor address will be the zero address
+            if (!hunt.vendor || hunt.vendor === ethers.ZeroAddress) {
+                return null;
+            }
+            return {
+                huntId: Number(hunt.huntId),
+                vendor: hunt.vendor,
+                rewardToken: hunt.rewardToken,
+                arrivalReward: ethers.formatUnits(hunt.arrivalReward, 6),
+                mainReward: ethers.formatUnits(hunt.mainReward, 6),
+                remainingFunds: ethers.formatUnits(hunt.remainingFunds, 6),
+                startTime: Number(hunt.startTime),
+                endTime: Number(hunt.endTime),
+                active: hunt.active,
+            };
+        } catch (err) {
+            console.error(`Error fetching hunt ${huntId} details:`, err);
+            return null;
+        }
     }
 
     async isHuntActive(huntId: number): Promise<boolean> {

@@ -43,7 +43,6 @@ export default function HuntDetailPage() {
                 const res = await getHunt(id!);
                 setHunt(res.data.hunt);
             } catch {
-                // Fallback to demo data
                 setHunt(DEMO_HUNTS[id!] || DEMO_HUNTS['demo-1']);
             } finally {
                 setLoading(false);
@@ -54,19 +53,33 @@ export default function HuntDetailPage() {
 
     if (loading) {
         return (
-            <div className="page" style={{ padding: '24px' }}>
-                <div className="card skeleton" style={{ height: '200px', marginBottom: '16px' }} />
-                <div className="card skeleton" style={{ height: '100px', marginBottom: '16px' }} />
-                <div className="card skeleton" style={{ height: '150px' }} />
+            <div style={{ backgroundColor: 'var(--nb-bg)', minHeight: '100vh', padding: '24px' }}>
+                <div style={{ height: '200px', backgroundColor: '#E5E7EB', borderRadius: 'var(--nb-radius-lg)', border: 'var(--nb-border)', opacity: 0.5, marginBottom: '24px' }} />
+                <div style={{ height: '100px', backgroundColor: '#E5E7EB', borderRadius: 'var(--nb-radius-lg)', border: 'var(--nb-border)', opacity: 0.5, marginBottom: '24px' }} />
+                <div style={{ height: '150px', backgroundColor: '#E5E7EB', borderRadius: 'var(--nb-radius-lg)', border: 'var(--nb-border)', opacity: 0.5 }} />
             </div>
         );
     }
 
     if (!hunt) {
         return (
-            <div className="page" style={{ padding: '24px', textAlign: 'center' }}>
-                <h2>Hunt not found</h2>
-                <button className="btn btn-primary mt-4" onClick={() => navigate('/hunts')}>Back to Hunts</button>
+            <div style={{ backgroundColor: 'var(--nb-bg)', minHeight: '100vh', padding: '24px', textAlign: 'center', color: '#000' }}>
+                <h1 style={{ fontSize: '32px', fontWeight: 900, marginBottom: '24px' }}>HUNT NOT FOUND</h1>
+                <button
+                    onClick={() => navigate('/hunts')}
+                    style={{
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: 'var(--nb-border)',
+                        boxShadow: '4px 4px 0px #000',
+                        borderRadius: 'var(--nb-radius)',
+                        padding: '12px 24px',
+                        fontSize: '18px',
+                        fontWeight: 900,
+                        cursor: 'pointer'
+                    }}
+                >
+                    BACK TO HUNTS
+                </button>
             </div>
         );
     }
@@ -74,90 +87,225 @@ export default function HuntDetailPage() {
     const totalReward = Number(hunt.arrival_reward) + Number(hunt.main_reward);
 
     return (
-        <div className="page">
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            minHeight: '100vh',
+            padding: '24px',
+            paddingBottom: '100px',
+            fontFamily: "'Inter', sans-serif",
+            color: '#000000'
+        }}>
             {/* Header */}
-            <div style={{ padding: '16px 0' }}>
-                <button onClick={() => navigate('/hunts')} className="btn btn-secondary btn-sm mb-3">← Back</button>
-                <div className="flex justify-between items-center">
-                    <div>
-                        <span className={`badge badge-${hunt.status}`} style={{ marginBottom: '8px', display: 'inline-block' }}>{hunt.status}</span>
-                        <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{hunt.title}</h1>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{hunt.business_name}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Reward Breakdown */}
-            <div className="card-glass mb-3 animate-scale-in">
-                <h3 className="mb-3" style={{ fontSize: '0.95rem' }}>💰 Reward Breakdown</h3>
-                <div className="flex justify-between items-center gap-3" style={{
-                    background: 'rgba(124, 58, 237, 0.1)', borderRadius: '12px', padding: '16px',
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '32px'
+            }}>
+                <button
+                    onClick={() => navigate(-1)}
+                    style={{
+                        width: '48px',
+                        height: '48px',
+                        backgroundColor: '#FFFFFF',
+                        border: 'var(--nb-border)',
+                        boxShadow: '4px 4px 0px #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    ←
+                </button>
+                <h1 style={{
+                    fontSize: '20px',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    margin: 0,
+                    letterSpacing: '-1px'
                 }}>
-                    <div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary-light)' }}>{hunt.arrival_reward}</div>
-                        <small>Arrival USDC</small>
+                    HUNT DETAILS
+                </h1>
+                <div style={{ width: '48px' }} />
+            </div>
+
+            {/* Main Hunt Board */}
+            <div style={{
+                backgroundColor: '#FFFFFF',
+                border: 'var(--nb-border)',
+                boxShadow: '8px 8px 0px #000',
+                borderRadius: 'var(--nb-radius-lg)',
+                padding: '24px',
+                marginBottom: '32px'
+            }}>
+                <div style={{ marginBottom: '16px' }}>
+                    <span style={{
+                        backgroundColor: hunt.status === 'active' ? 'var(--nb-mint)' : '#FCA5A5',
+                        border: '2px solid #000',
+                        borderRadius: '6px',
+                        padding: '4px 12px',
+                        fontSize: '12px',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        display: 'inline-block',
+                        marginBottom: '12px'
+                    }}>
+                        {hunt.status}
+                    </span>
+                    <h2 style={{
+                        fontSize: '32px',
+                        fontWeight: 900,
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        margin: 0,
+                        lineHeight: '1',
+                        letterSpacing: '-1.5px'
+                    }}>
+                        {hunt.title}
+                    </h2>
+                    <p style={{
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        color: '#6B7280',
+                        marginTop: '8px',
+                        textTransform: 'uppercase'
+                    }}>
+                        {hunt.business_name}
+                    </p>
+                </div>
+
+                {/* Reward Section */}
+                <div style={{
+                    backgroundColor: 'var(--nb-pink)',
+                    border: '3px solid #000',
+                    borderRadius: '16px',
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    marginBottom: '24px'
+                }}>
+                    <p style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>Quest Rewards</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                            <span style={{ fontSize: '24px', fontWeight: 900 }}>{totalReward}</span>
+                            <span style={{ fontSize: '14px', fontWeight: 800, marginLeft: '4px' }}>USDC</span>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                            <p style={{ fontSize: '10px', fontWeight: 700, margin: 0 }}>ARRIVAL: {hunt.arrival_reward} USDC</p>
+                            <p style={{ fontSize: '10px', fontWeight: 700, margin: 0 }}>MAIN: {hunt.main_reward} USDC</p>
+                        </div>
                     </div>
-                    <div style={{ width: '1px', background: 'var(--border-color)' }} />
-                    <div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success)' }}>{hunt.main_reward}</div>
-                        <small>Main USDC</small>
-                    </div>
-                    <div style={{ width: '1px', background: 'var(--border-color)' }} />
-                    <div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--warning)' }}>{totalReward}</div>
-                        <small>Total USDC</small>
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px' }}>Description</h3>
+                    <p style={{ fontSize: '14px', lineHeight: '1.5', fontWeight: 600, color: '#374151', margin: 0 }}>
+                        {hunt.description}
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style={{ fontSize: '14px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px' }}>Location</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '20px' }}>📍</span>
+                        <span style={{ fontSize: '14px', fontWeight: 700 }}>{hunt.location_name || 'Downtown Area'}</span>
                     </div>
                 </div>
             </div>
 
-            {/* Description */}
-            <div className="card mb-3 animate-slide-up">
-                <h3 className="mb-2">📝 Description</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>{hunt.description}</p>
-            </div>
-
-            {/* Location */}
-            <div className="card mb-3 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                <h3 className="mb-2">📍 Location</h3>
-                <p style={{ color: 'var(--text-secondary)' }}>{hunt.location_name || 'Location available after scan'}</p>
-            </div>
-
-            {/* Tasks - Locked until QR scan */}
-            <div className="card mb-3 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                <div className="flex items-center gap-3" style={{ padding: '8px 0' }}>
-                    <div style={{ fontSize: '2rem' }}>🔒</div>
-                    <div>
-                        <h3 style={{ fontSize: '0.95rem', marginBottom: '4px' }}>Tasks Locked</h3>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                            Scan the QR code at the location to unlock {
-                                hunt.tasks ? (typeof hunt.tasks === 'string' ? JSON.parse(hunt.tasks) : hunt.tasks).length : 0
-                            } tasks and start earning rewards
-                        </p>
-                    </div>
+            {/* Task Card (Locked/Unlocked) */}
+            <div style={{
+                backgroundColor: '#FFFFFF',
+                border: 'var(--nb-border)',
+                boxShadow: 'var(--nb-shadow)',
+                borderRadius: 'var(--nb-radius-lg)',
+                padding: '24px',
+                marginBottom: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px'
+            }}>
+                <div style={{
+                    width: '64px',
+                    height: '64px',
+                    backgroundColor: 'var(--nb-yellow)',
+                    border: '3px solid #000',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '32px'
+                }}>
+                    🔒
+                </div>
+                <div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>Tasks Locked</h3>
+                    <p style={{ fontSize: '12px', fontWeight: 600, color: '#6B7280', marginTop: '4px', margin: 0 }}>
+                        Scan QR at location to unlock tasks and start earning.
+                    </p>
                 </div>
             </div>
 
             {/* Action Buttons */}
             {hunt.status === 'active' ? (
-                <div className="flex flex-col gap-2 mb-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-                    <button className="btn btn-primary btn-lg btn-full" onClick={() => navigate('/scan', { state: { hunt } })}>
-                        📱 Scan QR at Location
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <button
+                        onClick={() => navigate('/scan', { state: { hunt } })}
+                        style={{
+                            backgroundColor: 'var(--nb-yellow)',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: 'var(--nb-radius-lg)',
+                            padding: '20px',
+                            fontSize: '20px',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '12px'
+                        }}
+                    >
+                        <span>📷</span> SCAN QR TO START
                     </button>
-                    <button className="btn btn-secondary btn-full" onClick={() => navigate('/map')}>
-                        🗺️ Navigate to Location
+                    <button
+                        onClick={() => navigate('/map')}
+                        style={{
+                            backgroundColor: '#FFFFFF',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: 'var(--nb-radius-lg)',
+                            padding: '16px',
+                            fontSize: '16px',
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        🗺️ VIEW ON MAP
                     </button>
                 </div>
             ) : (
-                <div className="card mb-4 text-center animate-slide-up" style={{ animationDelay: '0.3s', padding: '24px' }}>
-                    <p style={{ color: 'var(--text-muted)' }}>
+                <div style={{
+                    backgroundColor: '#FEE2E2',
+                    border: 'var(--nb-border)',
+                    borderRadius: 'var(--nb-radius-lg)',
+                    padding: '24px',
+                    textAlign: 'center'
+                }}>
+                    <p style={{ fontSize: '16px', fontWeight: 900, color: '#991B1B', margin: 0 }}>
                         {hunt.status === 'upcoming'
-                            ? '⏳ This hunt has not started yet. Check back soon!'
-                            : '🛑 This hunt has expired and is no longer active.'}
+                            ? '⏳ HUNT NOT STARTED YET'
+                            : '🛑 HUNT EXPIRED'}
                     </p>
                 </div>
             )}
 
-            <div style={{ height: '80px' }} />
             <BottomNav />
         </div>
     );

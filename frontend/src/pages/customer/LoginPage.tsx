@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useConnect } from 'wagmi';
 import { login } from '../../lib/api';
+import huntBuilding from '../../assets/hunt_building.png';
+import huntMap from '../../assets/hunt_map.png';
 
 export default function LoginPage() {
     const { isConnected, address } = useAccount();
@@ -10,7 +12,6 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (isConnected && address) {
-            // Register user in backend database
             login(address, 'user').catch(() => console.log('Backend not available — using demo mode'));
             navigate('/hunts');
         }
@@ -24,72 +25,198 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            color: 'var(--nb-text)',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '24px',
+            position: 'relative',
+            overflowX: 'hidden',
+            fontFamily: "'Inter', sans-serif"
+        }}>
+            {/* Top Buttons Row */}
             <div style={{
-                position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)',
-                width: '300px', height: '300px', borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%)',
-                filter: 'blur(60px)', pointerEvents: 'none',
-            }} />
-
-            <div className="animate-scale-in" style={{ textAlign: 'center', marginBottom: '48px', position: 'relative' }}>
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '40px',
+                zIndex: 10
+            }}>
+                <button
+                    onClick={() => navigate('/')}
+                    style={{
+                        width: '56px',
+                        height: '56px',
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: 'var(--nb-border)',
+                        boxShadow: 'var(--nb-shadow)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '24px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    ✕
+                </button>
                 <div style={{
-                    fontSize: '4rem', fontWeight: 900,
-                    background: 'var(--gradient-primary)',
-                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text', letterSpacing: '-0.04em', lineHeight: 1,
+                    width: '56px',
+                    height: '56px',
+                    backgroundColor: 'var(--nb-mint)',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '24px'
                 }}>
-                    Tr!vvo
-                </div>
-                <p style={{ marginTop: '12px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-                    Hunt. Explore. Earn.
-                </p>
-            </div>
-
-            <div className="animate-slide-up flex flex-col gap-3" style={{ marginBottom: '48px', width: '100%' }}>
-                {[
-                    { icon: '🗺️', text: 'Discover quests near you' },
-                    { icon: '📱', text: 'Scan QR codes at locations' },
-                    { icon: '💰', text: 'Earn USDC crypto rewards' },
-                ].map((item, i) => (
-                    <div key={i} className="card-glass flex items-center gap-3" style={{ padding: '14px 18px', animationDelay: `${i * 0.1}s` }}>
-                        <span style={{ fontSize: '1.4rem' }}>{item.icon}</span>
-                        <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{item.text}</span>
-                    </div>
-                ))}
-            </div>
-
-            <div style={{ width: '100%' }} className="animate-slide-up">
-                <button onClick={handleConnect} disabled={isPending} className="btn btn-primary btn-lg btn-full">
-                    {isPending ? <>⏳ Connecting...</> : (
-                        <>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="2" y="6" width="20" height="12" rx="2" />
-                                <path d="M22 10H2" />
-                            </svg>
-                            Connect MetaMask
-                        </>
-                    )}
-                </button>
-
-                <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    🔺 Avalanche Fuji Testnet • Rewards in USDC
-                </p>
-            </div>
-
-            <div className="card mt-6 animate-slide-up" style={{ width: '100%', animationDelay: '0.3s' }}>
-                <h3 className="mb-2" style={{ fontSize: '0.85rem' }}>🔧 Testnet Setup</h3>
-                <div className="flex flex-col gap-1">
-                    <small>1. Install MetaMask browser extension</small>
-                    <small>2. Add Avalanche Fuji network (auto-prompted)</small>
-                    <small>3. Get free test AVAX from faucet</small>
+                    🧭
                 </div>
             </div>
 
-            <div style={{ marginTop: '32px' }}>
-                <button onClick={() => navigate('/vendor/dashboard')} className="btn btn-secondary btn-sm" style={{ fontSize: '0.78rem' }}>
-                    I'm a vendor →
+            {/* Header Content */}
+            <div style={{ textAlign: 'center', marginBottom: '40px', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '-10px', right: '-40px', fontSize: '32px' }}>🗝️</div>
+                <h1 style={{
+                    fontSize: '48px',
+                    fontWeight: 900,
+                    fontStyle: 'italic',
+                    textTransform: 'uppercase',
+                    color: '#000000',
+                    lineHeight: '1',
+                    margin: 0,
+                    letterSpacing: '-1px'
+                }}>
+                    WELCOME<br />HUNTER
+                </h1>
+            </div>
+
+            {/* Central Images Area */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '16px',
+                marginBottom: '60px',
+                width: '100%',
+                position: 'relative'
+            }}>
+                <div style={{ position: 'absolute', left: '-5px', bottom: '10px', fontSize: '32px', zIndex: 1 }}>🌟</div>
+
+                {/* Image Card 1 */}
+                <div style={{
+                    width: '160px',
+                    height: '160px',
+                    backgroundColor: '#000',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: 'var(--nb-radius)',
+                    overflow: 'hidden'
+                }}>
+                    <img src={huntBuilding} alt="City Hunt" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+
+                {/* Image Card 2 */}
+                <div style={{
+                    width: '160px',
+                    height: '160px',
+                    backgroundColor: '#000',
+                    border: 'var(--nb-border)',
+                    boxShadow: 'var(--nb-shadow)',
+                    borderRadius: 'var(--nb-radius)',
+                    overflow: 'hidden'
+                }}>
+                    <img src={huntMap} alt="Map Explorer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+            </div>
+
+            {/* Action Buttons Area */}
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+                marginBottom: '40px'
+            }}>
+                {/* Connect MetaMask Button */}
+                <button
+                    onClick={handleConnect}
+                    disabled={isPending}
+                    style={{
+                        width: '100%',
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: 'var(--nb-border)',
+                        boxShadow: 'var(--nb-shadow)',
+                        borderRadius: 'var(--nb-radius-lg)',
+                        padding: '20px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '12px',
+                        fontSize: '20px',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <span style={{ fontSize: '24px' }}>📁</span>
+                    {isPending ? 'Connecting...' : 'CONNECT METAMASK'}
                 </button>
+
+                {/* Vendor Button */}
+                <button
+                    onClick={() => navigate('/vendor/dashboard')}
+                    style={{
+                        width: '100%',
+                        backgroundColor: 'var(--nb-pink)',
+                        border: '4px dashed #000',
+                        boxShadow: 'var(--nb-shadow)',
+                        borderRadius: 'var(--nb-radius-lg)',
+                        padding: '20px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '12px',
+                        fontSize: '20px',
+                        fontWeight: 800,
+                        cursor: 'pointer'
+                    }}
+                >
+                    I am a Vendor 🏪
+                </button>
+            </div>
+
+            {/* Footer Text Links */}
+            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                <p style={{ color: '#6B7280', fontSize: '16px', margin: '0 0 8px 0' }}>New to the hunt?</p>
+                <button style={{
+                    background: 'none',
+                    border: 'none',
+                    borderBottom: '4px solid var(--nb-yellow)',
+                    fontSize: '18px',
+                    fontWeight: 800,
+                    padding: '0 0 2px 0',
+                    cursor: 'pointer'
+                }}>
+                    Create an account
+                </button>
+            </div>
+
+            {/* Footer Icons */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '32px',
+                fontSize: '24px',
+                opacity: 0.3
+            }}>
+                <span>📍</span>
+                <span>📷</span>
+                <span>🏆</span>
             </div>
         </div>
     );

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { createHunt, login } from '../../lib/api';
-import { VendorSidebar } from '../../components/VendorSidebar';
-import { WalletButton } from '../../components/WalletButton';
+import LogoT from '../../assets/LogoT.png';
 
 export default function CreateHuntPage() {
     const navigate = useNavigate();
@@ -58,114 +57,288 @@ export default function CreateHuntPage() {
         }
     };
 
-    return (
-        <div className="vendor-layout">
-            <div className="vendor-header">
-                <div className="logo logo-sm">Tr!vvo</div>
-                <WalletButton />
-            </div>
-            <VendorSidebar />
+    const labelStyle: React.CSSProperties = {
+        fontSize: '12px',
+        fontWeight: 900,
+        textTransform: 'uppercase',
+        marginBottom: '8px',
+        display: 'block',
+        color: '#000'
+    };
 
-            <div className="page" style={{ paddingBottom: '40px' }}>
-                <div className="page-header">
-                    <button className="back-btn" onClick={() => navigate('/vendor/dashboard')}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
-                    </button>
-                    <h2>Create New Hunt</h2>
+    const inputStyle: React.CSSProperties = {
+        width: '100%',
+        padding: '12px 16px',
+        backgroundColor: '#FFFFFF',
+        border: '3px solid #000',
+        borderRadius: '12px',
+        fontSize: '16px',
+        fontWeight: 700,
+        outline: 'none',
+        boxShadow: '4px 4px 0px #000'
+    };
+
+    const cardStyle: React.CSSProperties = {
+        backgroundColor: '#FFFFFF',
+        border: 'var(--nb-border)',
+        boxShadow: 'var(--nb-shadow)',
+        borderRadius: 'var(--nb-radius-lg)',
+        padding: '24px',
+        marginBottom: '24px'
+    };
+
+    return (
+        <div style={{
+            backgroundColor: 'var(--nb-bg)',
+            minHeight: '100vh',
+            fontFamily: "'Inter', sans-serif",
+            color: '#000000',
+            paddingBottom: '40px'
+        }}>
+            {/* Top Navigation Bar */}
+            <div style={{
+                backgroundColor: '#FFFFFF',
+                borderBottom: 'var(--nb-border)',
+                padding: '16px 24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: 'var(--nb-yellow)',
+                        border: '2px solid #000',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '4px'
+                    }}>
+                        <img src={LogoT} alt="T" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                    <span style={{ fontSize: '18px', fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase' }}>TR!VVO</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span style={{ fontSize: '20px', cursor: 'pointer' }}>🔔</span>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: '#E5E7EB',
+                        border: '2px solid #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px'
+                    }}>👤</div>
+                </div>
+            </div>
+
+            <div style={{ padding: '24px' }}>
+                {/* Header Section */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+                    <button
+                        onClick={() => navigate('/vendor/dashboard')}
+                        style={{
+                            width: '48px',
+                            height: '48px',
+                            backgroundColor: '#FFFFFF',
+                            border: 'var(--nb-border)',
+                            boxShadow: '4px 4px 0px #000',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '20px',
+                            cursor: 'pointer'
+                        }}
+                    >←</button>
+                    <h1 style={{
+                        fontSize: '28px',
+                        fontWeight: 900,
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        margin: 0,
+                        lineHeight: '1'
+                    }}>NEW HUNT! 🏹</h1>
                 </div>
 
-                <div className="flex flex-col gap-4 animate-fade-in">
-                    {/* Basic info */}
-                    <div className="card-glass">
-                        <h3 className="mb-3">📝 Basic Info</h3>
-                        <div className="flex flex-col gap-3">
-                            <div className="input-group">
-                                <label>Hunt Name</label>
-                                <input className="input" placeholder="Coffee Discovery Trail" value={form.title} onChange={(e) => updateField('title', e.target.value)} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                    {/* Basic Info Section */}
+                    <div style={cardStyle}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span>📝</span> BASIC INFO
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div>
+                                <label style={labelStyle}>HUNT NAME</label>
+                                <input style={inputStyle} placeholder="e.g. Secret Coffee Trail" value={form.title} onChange={(e) => updateField('title', e.target.value)} />
                             </div>
-                            <div className="input-group">
-                                <label>Description</label>
-                                <textarea className="input" placeholder="Describe the hunt experience..." value={form.description} onChange={(e) => updateField('description', e.target.value)} />
+                            <div>
+                                <label style={labelStyle}>DESCRIPTION</label>
+                                <textarea
+                                    style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }}
+                                    placeholder="Tell hunters what to expect..."
+                                    value={form.description}
+                                    onChange={(e) => updateField('description', e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
 
-                    {/* Location */}
-                    <div className="card-glass">
-                        <h3 className="mb-3">📍 Location</h3>
-                        <div className="flex flex-col gap-3">
-                            <div className="input-group">
-                                <label>Location Name</label>
-                                <input className="input" placeholder="Downtown Store" value={form.locationName} onChange={(e) => updateField('locationName', e.target.value)} />
+                    {/* Location Section */}
+                    <div style={cardStyle}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span>📍</span> LOCATION
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div>
+                                <label style={labelStyle}>LOCATION NAME</label>
+                                <input style={inputStyle} placeholder="e.g. Downtown Central" value={form.locationName} onChange={(e) => updateField('locationName', e.target.value)} />
                             </div>
-                            <div className="flex gap-2">
-                                <div className="input-group" style={{ flex: 1 }}>
-                                    <label>Latitude</label>
-                                    <input className="input" placeholder="40.7128" value={form.locationLat} onChange={(e) => updateField('locationLat', e.target.value)} />
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={labelStyle}>LATITUDE</label>
+                                    <input style={inputStyle} placeholder="40.7128" value={form.locationLat} onChange={(e) => updateField('locationLat', e.target.value)} />
                                 </div>
-                                <div className="input-group" style={{ flex: 1 }}>
-                                    <label>Longitude</label>
-                                    <input className="input" placeholder="-74.006" value={form.locationLng} onChange={(e) => updateField('locationLng', e.target.value)} />
+                                <div style={{ flex: 1 }}>
+                                    <label style={labelStyle}>LONGITUDE</label>
+                                    <input style={inputStyle} placeholder="-74.006" value={form.locationLng} onChange={(e) => updateField('locationLng', e.target.value)} />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Schedule */}
-                    <div className="card-glass">
-                        <h3 className="mb-3">📅 Schedule</h3>
-                        <div className="flex gap-2">
-                            <div className="input-group" style={{ flex: 1 }}>
-                                <label>Start Time</label>
-                                <input type="datetime-local" className="input" value={form.startTime} onChange={(e) => updateField('startTime', e.target.value)} />
+                    {/* Schedule Section */}
+                    <div style={cardStyle}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span>📅</span> SCHEDULE
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div>
+                                <label style={labelStyle}>START TIME</label>
+                                <input type="datetime-local" style={inputStyle} value={form.startTime} onChange={(e) => updateField('startTime', e.target.value)} />
                             </div>
-                            <div className="input-group" style={{ flex: 1 }}>
-                                <label>End Time</label>
-                                <input type="datetime-local" className="input" value={form.endTime} onChange={(e) => updateField('endTime', e.target.value)} />
+                            <div>
+                                <label style={labelStyle}>END TIME</label>
+                                <input type="datetime-local" style={inputStyle} value={form.endTime} onChange={(e) => updateField('endTime', e.target.value)} />
                             </div>
                         </div>
                     </div>
 
-                    {/* Rewards */}
-                    <div className="card-glass">
-                        <h3 className="mb-3">💰 Rewards (USDC)</h3>
-                        <div className="flex gap-2">
-                            <div className="input-group" style={{ flex: 1 }}>
-                                <label>Arrival Reward</label>
-                                <input className="input" type="number" step="0.1" value={form.arrivalReward} onChange={(e) => updateField('arrivalReward', e.target.value)} />
+                    {/* Rewards Section */}
+                    <div style={{ ...cardStyle, backgroundColor: 'var(--nb-pink)' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span>💰</span> REWARDS (USDC)
+                        </h3>
+                        <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
+                            <div style={{ flex: 1 }}>
+                                <label style={labelStyle}>ARRIVAL</label>
+                                <input type="number" step="0.1" style={inputStyle} value={form.arrivalReward} onChange={(e) => updateField('arrivalReward', e.target.value)} />
                             </div>
-                            <div className="input-group" style={{ flex: 1 }}>
-                                <label>Main Reward</label>
-                                <input className="input" type="number" step="0.1" value={form.mainReward} onChange={(e) => updateField('mainReward', e.target.value)} />
+                            <div style={{ flex: 1 }}>
+                                <label style={labelStyle}>MAIN</label>
+                                <input type="number" step="0.1" style={inputStyle} value={form.mainReward} onChange={(e) => updateField('mainReward', e.target.value)} />
                             </div>
                         </div>
-                        <div className="card mt-2" style={{ padding: '12px', textAlign: 'center' }}>
-                            <small>Total per participant: <strong style={{ color: 'var(--success)' }}>{(parseFloat(form.arrivalReward || '0') + parseFloat(form.mainReward || '0')).toFixed(1)} USDC</strong></small>
+                        <div style={{
+                            backgroundColor: '#FFFFFF',
+                            border: '2px solid #000',
+                            borderRadius: '12px',
+                            padding: '12px',
+                            textAlign: 'center'
+                        }}>
+                            <span style={{ fontSize: '14px', fontWeight: 900 }}>
+                                TOTAL: {(parseFloat(form.arrivalReward || '0') + parseFloat(form.mainReward || '0')).toFixed(1)} USDC PER HUNTER
+                            </span>
                         </div>
                     </div>
 
-                    {/* Tasks */}
-                    <div className="card-glass">
-                        <div className="flex justify-between items-center mb-3">
-                            <h3>🎯 Tasks</h3>
-                            <button onClick={addTask} className="btn btn-secondary btn-sm">+ Add</button>
+                    {/* Tasks Section */}
+                    <div style={cardStyle}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h3 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+                                <span>🎯</span> TASKS
+                            </h3>
+                            <button
+                                onClick={addTask}
+                                style={{
+                                    backgroundColor: 'var(--nb-mint)',
+                                    border: '2px solid #000',
+                                    borderRadius: '8px',
+                                    padding: '4px 12px',
+                                    fontSize: '12px',
+                                    fontWeight: 900,
+                                    cursor: 'pointer',
+                                    boxShadow: '2px 2px 0px #000'
+                                }}
+                            >+ ADD TASK</button>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {form.tasks.map((task, i) => (
-                                <div key={i} className="flex gap-2 items-center">
-                                    <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', width: '20px' }}>{i + 1}</span>
-                                    <input className="input" style={{ flex: 1 }} placeholder="Task description..." value={task} onChange={(e) => updateTask(i, e.target.value)} />
+                                <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    <div style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        backgroundColor: '#000',
+                                        color: '#FFF',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        fontSize: '12px',
+                                        fontWeight: 900
+                                    }}>{i + 1}</div>
+                                    <input
+                                        style={{ ...inputStyle, padding: '8px 12px' }}
+                                        placeholder="Task description..."
+                                        value={task}
+                                        onChange={(e) => updateTask(i, e.target.value)}
+                                    />
                                     {form.tasks.length > 1 && (
-                                        <button onClick={() => removeTask(i)} className="btn btn-danger btn-sm" style={{ padding: '8px' }}>✕</button>
+                                        <button
+                                            onClick={() => removeTask(i)}
+                                            style={{
+                                                backgroundColor: '#FCA5A5',
+                                                border: '2px solid #000',
+                                                borderRadius: '8px',
+                                                padding: '8px',
+                                                cursor: 'pointer',
+                                                fontWeight: 900
+                                            }}
+                                        >✕</button>
                                     )}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Submit */}
-                    <button onClick={handleSubmit} className="btn btn-primary btn-lg btn-full" disabled={loading || !form.title}>
-                        {loading ? 'Creating...' : '🚀 Create Hunt'}
+                    {/* Submit Button */}
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading || !form.title}
+                        style={{
+                            width: '100%',
+                            backgroundColor: 'var(--nb-yellow)',
+                            border: 'var(--nb-border)',
+                            boxShadow: 'var(--nb-shadow)',
+                            borderRadius: 'var(--nb-radius-lg)',
+                            padding: '24px',
+                            fontSize: '22px',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            cursor: loading || !form.title ? 'not-allowed' : 'pointer',
+                            opacity: loading || !form.title ? 0.7 : 1,
+                            marginTop: '20px'
+                        }}
+                    >
+                        {loading ? 'CREATING...' : '🚀 DEPLOY HUNT'}
                     </button>
                 </div>
             </div>
