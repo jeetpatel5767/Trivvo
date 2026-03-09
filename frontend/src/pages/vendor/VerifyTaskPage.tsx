@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { completeTask, claimMainReward } from '../../lib/api';
+import { useAccount } from 'wagmi';
+import { completeTask, claimMainReward, getHunts } from '../../lib/api';
 import { VendorSidebar } from '../../components/VendorSidebar';
 import { WalletButton } from '../../components/WalletButton';
 
 export default function VerifyTaskPage() {
     const navigate = useNavigate();
+    const { address } = useAccount();
     const [walletAddress, setWalletAddress] = useState('');
     const [huntId, setHuntId] = useState('');
+    const [activeHunts, setActiveHunts] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<any>(null);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (!address) return;
+        getHunts().then(res => {
+            if (res.data?.hunts) {
+                const myActive = res.data.hunts.filter((h: any) =>
+                    h.status === 'active' &&
+                    h.vendor_wallet?.toLowerCase() === address.toLowerCase()
+                );
+                setActiveHunts(myActive);
+                if (myActive.length > 0) {
+                    setHuntId(myActive[0].hunt_id);
+                }
+            }
+        }).catch(err => console.error(err));
+    }, [address]);
 
     const handleVerify = async () => {
         setLoading(true);
@@ -70,8 +89,23 @@ export default function VerifyTaskPage() {
 
                             <div className="flex flex-col gap-3">
                                 <div className="input-group">
-                                    <label>Hunt ID</label>
-                                    <input className="input" placeholder="Hunt ID or demo-1" value={huntId} onChange={(e) => setHuntId(e.target.value)} />
+                                    <label>Select Hunt</label>
+                                    <select
+                                        className="input"
+                                        value={huntId}
+                                        onChange={(e) => setHuntId(e.target.value)}
+                                        style={{ appearance: 'auto', backgroundColor: 'var(--bg-layer)' }}
+                                    >
+                                        {activeHunts.length === 0 ? (
+                                            <option value="" disabled>No active hunts found</option>
+                                        ) : (
+                                            activeHunts.map(h => (
+                                                <option key={h.hunt_id} value={h.hunt_id}>
+                                                    {h.title}
+                                                </option>
+                                            ))
+                                        )}
+                                    </select>
                                 </div>
                                 <div className="input-group">
                                     <label>Participant Wallet Address</label>

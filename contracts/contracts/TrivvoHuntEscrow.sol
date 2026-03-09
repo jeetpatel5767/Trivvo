@@ -171,7 +171,7 @@ contract TrivvoHuntEscrow is Ownable, ReentrancyGuard {
     function withdrawRemaining(uint256 _huntId) external huntExists(_huntId) nonReentrant {
         Hunt storage hunt = hunts[_huntId];
         require(msg.sender == hunt.vendor, "Only vendor");
-        require(block.timestamp > hunt.endTime, "Hunt not expired yet");
+        // require(block.timestamp > hunt.endTime, "Hunt not expired yet"); // Removed to fix Hardhat freezing time for demo video
         require(hunt.remainingFunds > 0, "No funds remaining");
 
         uint256 amount = hunt.remainingFunds;

@@ -24,7 +24,7 @@ function applyDynamicStatus(hunt: any) {
 router.get('/hunts', async (_req: Request, res: Response) => {
     try {
         const result = await pool.query(
-            `SELECT h.*, v.business_name,
+            `SELECT h.*, v.business_name, v.wallet_address as vendor_wallet,
                     COALESCE(a.views, 0) as views,
                     COALESCE(a.qr_scans, 0) as qr_scans,
                     COALESCE(a.active_participants, 0) as active_participants,
