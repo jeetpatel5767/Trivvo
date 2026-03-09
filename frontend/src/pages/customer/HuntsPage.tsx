@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { getHunts } from '../../lib/api';
 import { HuntCard } from '../../components/HuntCard';
 import { BottomNav } from '../../components/BottomNav';
-import { WalletButton } from '../../components/WalletButton';
 
 // Demo data used as fallback when backend is unavailable
 const DEMO_HUNTS = [
@@ -36,7 +35,6 @@ export default function HuntsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState('all');
-    const [usingDemo, setUsingDemo] = useState(false);
 
     useEffect(() => {
         async function fetchHunts() {
@@ -47,12 +45,10 @@ export default function HuntsPage() {
                     setHunts(apiHunts);
                 } else {
                     setHunts(DEMO_HUNTS);
-                    setUsingDemo(true);
                 }
             } catch (err) {
                 console.log('Using demo hunts (backend unavailable)');
                 setHunts(DEMO_HUNTS);
-                setUsingDemo(true);
             } finally {
                 setLoading(false);
             }

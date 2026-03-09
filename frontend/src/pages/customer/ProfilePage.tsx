@@ -5,7 +5,6 @@ import { formatUnits } from 'viem';
 import { BottomNav } from '../../components/BottomNav';
 import { getProfile } from '../../lib/api';
 import { CONTRACTS, ERC20_ABI } from '../../lib/contracts';
-import LogoT from '../../assets/LogoT.png';
 
 export default function ProfilePage() {
     const navigate = useNavigate();
