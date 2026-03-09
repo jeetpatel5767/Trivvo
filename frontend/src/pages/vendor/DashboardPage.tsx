@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
 import { WalletButton } from '../../components/WalletButton';
-import { VendorSidebar } from '../../components/VendorSidebar';
 import { login, getHunts } from '../../lib/api';
 import LogoT from '../../assets/LogoT.png';
 import huntBuilding from '../../assets/hunt_building.png';

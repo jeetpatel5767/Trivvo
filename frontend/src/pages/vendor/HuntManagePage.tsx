@@ -33,7 +33,7 @@ export default function HuntManagePage() {
             const syncWithdrawal = async () => {
                 try {
                     await withdrawHunt(hunt.hunt_id, withdrawTxHash as string);
-                    setHunt(prev => ({ ...prev, status: 'ended', remaining_funds: '0.00' }));
+                    setHunt((prev: any) => ({ ...prev, status: 'ended', remaining_funds: '0.00' }));
                     setIsWithdrawing(false);
                 } catch (err) {
                     console.error('Failed to sync withdrawal with database', err);

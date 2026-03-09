@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BottomNav } from '../../components/BottomNav';
 
 export default function TasksPage() {
-    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state as any;
