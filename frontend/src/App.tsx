@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Web3Provider } from './providers/Web3Provider';
 import { MobileContainer } from './components/MobileContainer';
